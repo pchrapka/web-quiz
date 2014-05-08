@@ -24,6 +24,7 @@ var questions = [
     }];
 
 var currentQuestion = 0;
+var answers = [];
 
 function addQuestion(questionNum){
     // Get the current question object
@@ -41,19 +42,50 @@ function addQuestion(questionNum){
 
     // Create a button for each choice
     for(var i=0; i<curQuestionObj.choices.length; i++){
-        var newBtn = $('<input type="radio" name="answer" value="' + i + '"/>'+ curQuestionObj.choices[i] +'<br>');
+        var newBtn = $('<input type="radio" name="answer' + questionNum +
+            '" value="' + i + '"/>'+ curQuestionObj.choices[i] +'<br>');
         $("#" + questionID).find('.choices').append(newBtn);
     }
 }
 
+function showResults(){
+    // Add a div
+    $(document.body).append("<div class='results'></div>");
+    // Add a title
+    $('.results').append("<h2>Results</h2>");
+    for(var i=0; i<questions.length; i++){
+        
+    }
+}
+
 function nextQuestion(){
-    currentQuestion += 1;
-    addQuestion(currentQuestion);
+    // Save the selected value
+    var selectedVal = "";
+    var selected = $("input[type='radio'][name='answer"
+        + currentQuestion + "']:checked");
+    if(selected.length > 0){
+        selectedVal = selected.val();
+    }
+    answers.push(selectedVal);
+
+    // Hide the current question
+    var questionID = "question" + currentQuestion;
+    $("#" + questionID).hide();
+
+    if(currentQuestion < questions.length-1) {
+        // Add the next question
+        currentQuestion += 1;
+        addQuestion(currentQuestion);
+    }else{
+        $(".navigation").find("button").hide();
+        // Finished the quiz so we can show the results
+        showResults();
+    }
 }
 
 $(document).ready(function(){
-    // Add a question
+    // Add the first question
     addQuestion(currentQuestion);
-    $(".navigation").on("click","button", nextQuestion());
-
+    // Add handler for next question button
+    $(".navigation").on("click","button", nextQuestion);
 });
