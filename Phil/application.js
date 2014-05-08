@@ -52,9 +52,20 @@ function showResults(){
     // Add a div
     $(document.body).append("<div class='results'></div>");
     // Add a title
-    $('.results').append("<h2>Results</h2>");
+    $('.results').append("<h2>Results</h2><ul></ul>");
     for(var i=0; i<questions.length; i++){
-        
+        var correctAnswer = questions[i].correctAnswer;
+        var message = (parseInt(answers[i]) == correctAnswer)
+            ? "Correct" : "Incorrect";
+        if(message == "Incorrect") {
+            $('.results').find('ul').append(
+                    '<li>Question ' + (i + 1) + ': ' + message +
+                    '<br>The correct answer is: '
+                     + questions[i].choices[correctAnswer] + '</li>')
+        }else{
+            $('.results').find('ul').append(
+                    '<li>Question ' + (i + 1) + ': ' + message + '</li>')
+        }
     }
 }
 
